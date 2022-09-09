@@ -17,8 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from todo.views import ProjectViewSet, ToDoViewSet, UserViewSet
-from users.views import CustomUserModelViewSet,user_post, user_get
+from todo.views import ProjectViewSet, ToDoViewSet, UserViewSet,user_get, user_post
 
 router = DefaultRouter()
 router.register('users', UserViewSet)
@@ -27,7 +26,9 @@ router.register('todo', ToDoViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path('user_get/<int:pk>', user_get),
+    # path('user_get/<int:pk>', user_get),
     path('user_get/', user_get),
-    path('user_post/', user_post),
+    path('user_post', user_post),
+    path('user_post/<int:pk>', user_post),
+
 ]
