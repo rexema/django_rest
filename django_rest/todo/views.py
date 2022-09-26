@@ -4,7 +4,10 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.views import APIView
+from rest_framework.decorators import api_view, renderer_classes, action
 from .models import Project, ToDo, User
 from .serializers import ProjectSerializer, ToDoSerializer, UserSerializer, UserModelSerializer
 
@@ -18,6 +21,21 @@ class ProjectViewSet(ModelViewSet):
     serializer_class = ProjectSerializer
     queryset = Project.objects.all()
 
+
+
+
+class ProjectApiView(APIView):
+    renderer_classes = [ JSONRenderer]
+    def get(self, request):
+        project = Project.objects.all()
+        serializer = ProjectSerializer(project, many=True)
+        return Response(serializer.data)
+@api_view(['GET'])
+@renderer_classes([JSONRenderer])
+def project_api_get(request):
+    project = Project.objects.all()
+    serializer = ProjectSerializer(project, many=True)
+    return Response(serializer.data)
 
 class ToDoViewSet(ModelViewSet):
     serializer_class = ToDoSerializer
@@ -52,4 +70,6 @@ def user_post(request, pk=None):
         return HttpResponse(json_data)
 
     return HttpResponseBadRequest(JSONRenderer().render(serializer.errors))
+
+
 

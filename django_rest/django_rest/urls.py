@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from todo.views import ProjectViewSet, ToDoViewSet, UserViewSet,user_get, user_post
+from todo.views import *
 
 router = DefaultRouter()
 router.register('users', UserViewSet)
@@ -30,5 +30,7 @@ urlpatterns = [
     path('user_get/', user_get),
     path('user_post', user_post),
     path('user_post/<int:pk>', user_post),
+    path('project_api_get', project_api_get),
+    path('project_api_get_class', ProjectApiView.as_view()),
 
 ]

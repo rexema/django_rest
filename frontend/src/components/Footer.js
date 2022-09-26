@@ -1,8 +1,17 @@
+import React from 'react'
+import { Navbar, Container, Row, Col } from 'react-bootstrap'
+
+
+
 const Footer =() => {
     return (
-     <div>
-        <h5>Copyright</h5>
-</div>
-    )
+        <Container>
+        <Row>
+            <Col className='text-center py-3'>
+            Copyright &copy;
+            </Col>
+        </Row>
+     </Container>
+      )
 }
 export default Footer
