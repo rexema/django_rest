@@ -2,13 +2,14 @@ from django.db.models import ManyToManyField
 from django.forms import URLField
 
 from .models import Project, ToDo, User
-from rest_framework.serializers import ModelSerializer, Serializer, CharField, EmailField
+from rest_framework.serializers import ModelSerializer, Serializer, CharField, EmailField, StringRelatedField
 
 
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
+
 
 class UserModelSerializer(Serializer):
     first_name = CharField(max_length=60)

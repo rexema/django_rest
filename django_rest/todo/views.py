@@ -22,20 +22,22 @@ class ProjectViewSet(ModelViewSet):
     queryset = Project.objects.all()
 
 
-
-
 class ProjectApiView(APIView):
-    renderer_classes = [ JSONRenderer]
+    renderer_classes = [JSONRenderer]
+
     def get(self, request):
         project = Project.objects.all()
         serializer = ProjectSerializer(project, many=True)
         return Response(serializer.data)
+
+
 @api_view(['GET'])
 @renderer_classes([JSONRenderer])
 def project_api_get(request):
     project = Project.objects.all()
     serializer = ProjectSerializer(project, many=True)
     return Response(serializer.data)
+
 
 class ToDoViewSet(ModelViewSet):
     serializer_class = ToDoSerializer
@@ -48,6 +50,7 @@ def user_get(request):
 
     json_data = JSONRenderer().render(serializer.data)
     return HttpResponse(json_data)
+
 
 @csrf_exempt
 def user_post(request, pk=None):
@@ -70,6 +73,3 @@ def user_post(request, pk=None):
         return HttpResponse(json_data)
 
     return HttpResponseBadRequest(JSONRenderer().render(serializer.errors))
-
-
-
