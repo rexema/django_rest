@@ -26,3 +26,4 @@ class ToDo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     project = models.OneToOneField(Project, on_delete=models.CASCADE)
     is_accomplished = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)

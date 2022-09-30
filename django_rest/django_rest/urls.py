@@ -20,9 +20,10 @@ from rest_framework.routers import DefaultRouter
 from todo.views import *
 
 router = DefaultRouter()
-router.register('users', UserViewSet)
+router.register('users', UserModelViewSet)
 router.register('project', ProjectViewSet)
 router.register('todo', ToDoViewSet)
+router.register('user_list', UserViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
@@ -30,7 +31,4 @@ urlpatterns = [
     path('user_get/', user_get),
     path('user_post', user_post),
     path('user_post/<int:pk>', user_post),
-    path('project_api_get', project_api_get),
-    path('project_api_get_class', ProjectApiView.as_view()),
-
 ]

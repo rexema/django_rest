@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'users',
     'corsheaders',
     'todo',
+    'django_filters',
   ]
 
 MIDDLEWARE = [
@@ -134,3 +135,7 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "users.CustomUser"
+REST_FRAMEWORK = {'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+                  'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+                  "PAGE_SIZE": 100,
+                  }
