@@ -1,5 +1,6 @@
 import io
 
+from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
@@ -19,7 +20,7 @@ from django_filters import rest_framework as filters
 
 
 class UserPagination(PageNumberPagination):
-    page_size = 10
+    page_size = 2
 
 
 class ToDoPagination(PageNumberPagination):
@@ -28,9 +29,10 @@ class ToDoPagination(PageNumberPagination):
 
 class UserModelViewSet(ModelViewSet):
     serializer_class = UserSerializer
-    queryset = User.objects.all()
+    queryset = User.objects.all().order_by('id')
     filterset_class = UserFilter
-    pagination_class = UserPagination
+    # pagination_class = UserPagination
+
 
 
 class UserViewSet(ViewSet):
@@ -50,16 +52,18 @@ class UserViewSet(ViewSet):
 
 class ProjectViewSet(ModelViewSet):
     serializer_class = ProjectSerializer
-    queryset = Project.objects.all()
-    pagination_class = UserPagination
+    queryset = Project.objects.all().order_by('id')
+    # pagination_class = UserPagination
     filterset_class = ProjectFilter
+
 
 
 class ToDoViewSet(ModelViewSet):
     serializer_class = ToDoSerializer
-    queryset = ToDo.objects.all()
+    queryset = ToDo.objects.all().order_by('id')
     filterset_class = ToDoFilter
-    pagination_class = ToDoPagination
+    # pagination_class = ToDoPagination
+
 
     def destroy(self, request, *args, **kwargs):
         todo = self.get_object()
