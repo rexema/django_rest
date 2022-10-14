@@ -7,16 +7,19 @@ from rest_framework import status
 from rest_framework.generics import ListAPIView, RetrieveAPIView, get_object_or_404
 from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
 from rest_framework.parsers import JSONParser
+from rest_framework.permissions import IsAuthenticated, BasePermission
 from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, renderer_classes, action
 
+from users.serializers import  CustomUserModelSerializer
 from .filters import UserFilter, ProjectFilter, ToDoFilter
 from .models import Project, ToDo, User
 from .serializers import ProjectSerializer, ToDoSerializer, UserSerializer, UserModelSerializer
 from django_filters import rest_framework as filters
+from users.models import CustomUser
 
 
 class UserPagination(PageNumberPagination):
@@ -33,6 +36,10 @@ class UserModelViewSet(ModelViewSet):
     filterset_class = UserFilter
     # pagination_class = UserPagination
 
+
+class CustomUserViewSet(ModelViewSet):
+    serializer_class = CustomUserModelSerializer
+    queryset = CustomUser.objects.all()
 
 
 class UserViewSet(ViewSet):
@@ -51,14 +58,19 @@ class UserViewSet(ViewSet):
 
 
 class ProjectViewSet(ModelViewSet):
+    #permission_classes = [IsAuthenticated]
     serializer_class = ProjectSerializer
     queryset = Project.objects.all().order_by('id')
     # pagination_class = UserPagination
     filterset_class = ProjectFilter
 
+class AdminOnly(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_superuser
 
 
 class ToDoViewSet(ModelViewSet):
+    #permission_classes = [AdminOnly]
     serializer_class = ToDoSerializer
     queryset = ToDo.objects.all().order_by('id')
     filterset_class = ToDoFilter

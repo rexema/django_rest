@@ -1,39 +1,37 @@
 from rest_framework.exceptions import ValidationError
-from rest_framework.serializers import ModelSerializer, Serializer, CharField, EmailField, IntegerField
+from rest_framework.relations import StringRelatedField
+from rest_framework.serializers import ModelSerializer, Serializer, CharField, EmailField, IntegerField,ValidationError
 from .models import CustomUser
 
 
-class CustomUserSerializer(Serializer):
-    username = CharField(max_length=64)
-    first_name = CharField(max_length=64)
-    last_name = CharField(max_length=64)
-    email = EmailField(max_length=254)
+class CustomUserModelSerializer(ModelSerializer):
+    email = EmailField(max_length=90)
+    username = CharField(max_length=45)
+    password = CharField(min_length=5, write_only=True)
+    groups=StringRelatedField(many=True)
+
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'email', 'password','groups']
 
     def create(self, validated_data):
-        user = CustomUser(**validated_data)
+        user=CustomUser(
+            username=validated_data['username'],
+            email=validated_data['email']
+        )
+        user.set_password(validated_data['password'])
         user.save()
         return user
 
-    def validate_email(self, value):
-        if value == IntegerField:
-            raise ValidationError('email should be string')
-        return value
-
     def validate(self, attrs):
-        if attrs.get('last_name') == 'Sosnina' and attrs.get('first_name') != 'Anastasia':
-            raise ValidationError('my name must be Anastasia')
-        return attrs
+        username_exists = CustomUser.objects.filter(username=attrs['username']).exists()
 
-    def update(self, instance, validated_data):
-        instance.username = validated_data.get('username', instance.username)
-        instance.first_name = validated_data.get('first_name', instance.first_name)
-        instance.last_name = validated_data.get('last_name', instance.last_name)
-        instance.email = validated_data.get('email', instance.email)
-        instance.save()
-        return instance
+        if username_exists:
+            raise ValidationError("User with this username exists")
 
+        email_exists = CustomUser.objects.filter(email=attrs['email']).exists()
 
-class CustomUserModelSerializer(ModelSerializer):
-    class Meta:
-        model = CustomUser
-        fields = ['username', 'first_name', 'last_name', 'email']
+        if email_exists:
+            raise ValidationError("User with this email exists")
+
+        return super().validate(attrs)

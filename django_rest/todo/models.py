@@ -6,6 +6,11 @@ class User(models.Model):
     last_name = models.CharField(max_length=60)
     email = models.EmailField(unique=True)
 
+    class Meta:
+        verbose_name='Пользователь'
+        verbose_name_plural = 'Пользователи'
+
+
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
 

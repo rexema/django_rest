@@ -4,4 +4,4 @@ from users.models import CustomUser
 
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
-        CustomUser.objects.create_superuser(username='nastya', email='nastya2@mail.ru', password='123')
+        CustomUser.objects.create_superuser(username='sveta', email='sveta@mail.ru', password='sveta_2022')
