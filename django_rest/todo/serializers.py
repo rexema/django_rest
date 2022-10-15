@@ -1,6 +1,8 @@
 from django.db.models import ManyToManyField
 from django.forms import URLField
 
+from users.models import CustomUser
+from users.serializers import CustomUserModelSerializer
 from .models import Project, ToDo, User
 from rest_framework.serializers import ModelSerializer, Serializer, CharField, EmailField, StringRelatedField
 
@@ -30,6 +32,7 @@ class UserModelSerializer(Serializer):
 
 
 class ProjectSerializer(ModelSerializer):
+
     class Meta:
         model = Project
         fields = '__all__'
@@ -38,4 +41,4 @@ class ProjectSerializer(ModelSerializer):
 class ToDoSerializer(ModelSerializer):
     class Meta:
         model = ToDo
-        fields = ['text', 'date_of_creation','user', 'project']
+        fields = ['text', 'user', 'project']

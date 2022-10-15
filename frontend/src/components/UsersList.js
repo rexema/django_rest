@@ -8,7 +8,7 @@ const UserItem = ({user}) => {
                 <Link to={`/users/${user.id}`}>{user.first_name}</Link>
             </td>
             <td>
-                {user.last_name}
+                {user.username}
             </td>
             <td>
                 {user.email}
@@ -21,11 +21,9 @@ const UsersList = ({users}) => {
     return (
         <table>
             <th>
-                First name
+                Username
              </th>
-             <th>
-                Last name
-             </th>
+
              <th>
                 Email
              </th>

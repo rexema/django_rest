@@ -8,9 +8,6 @@ const ToDoItem = ({todo}) => {
                 {todo.text}
             </td>
             <td>
-                {todo.date_of_creation}
-            </td>
-            <td>
                {todo.user}
             </td>
             <td>
@@ -26,9 +23,7 @@ const ToDoList = ({todos}) => {
             <th>
                 Text
              </th>
-             <th>
-                Date of creation
-             </th>
+
              <th>
                 User
              </th>
