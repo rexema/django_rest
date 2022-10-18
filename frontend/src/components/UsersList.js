@@ -13,6 +13,9 @@ const UserItem = ({user}) => {
             <td>
                 {user.email}
             </td>
+             <td>
+                {user.groups}
+            </td>
         </tr>
     )
 }
@@ -23,9 +26,11 @@ const UsersList = ({users}) => {
             <th>
                 Username
              </th>
-
              <th>
                 Email
+             </th>
+             <th>
+                Groups
              </th>
              {users.map((user)=> <UserItem user={user}/> )}
         </table>
