@@ -32,8 +32,7 @@ class UserModelSerializer(Serializer):
 
 
 class ProjectSerializer(ModelSerializer):
-
-    user=StringRelatedField(many=True)
+    user = StringRelatedField(many=True)
 
     class Meta:
         model = Project
@@ -41,9 +40,11 @@ class ProjectSerializer(ModelSerializer):
 
 
 class ToDoSerializer(ModelSerializer):
-
     user = StringRelatedField(many=False)
     project = StringRelatedField(many=False)
+
     class Meta:
         model = ToDo
         fields = ['text', 'user', 'project']
+
+

@@ -15,13 +15,34 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken.views import obtain_auth_token
 from todo.views import *
+from todo.serializers import *
 from users import views
 from rest_framework_simplejwt.views import TokenObtainPairView,TokenRefreshView
+import users.urls
+from users.views import UserListApiView
+from users.serializers import UserSerializerUpdate
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
 
 router = DefaultRouter()
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title='todo',
+        default_version='v1',
+        description='Documentation',
+        contact=openapi.Contact(email='nastya@mail.ru'),
+        license=openapi.License(name='MIT LICENSE'),
+    ),
+    public=True,
+    permission_classes=[permissions.AllowAny],
+
+)
 
 router.register('users', CustomUserViewSet)
 router.register('project', ProjectViewSet)
@@ -38,5 +59,9 @@ urlpatterns = [
     path('api-token/',obtain_auth_token),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('', include('users.urls')),
+    # path('swagger<str:format>/', schema_view.with_ui()),
+    # path('swagger/', schema_view.with_ui('swagger')),
+    path('redoc/', schema_view.with_ui('redoc')),
 
 ]

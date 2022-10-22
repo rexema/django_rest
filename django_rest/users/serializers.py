@@ -1,6 +1,6 @@
 from rest_framework.exceptions import ValidationError
 from rest_framework.relations import StringRelatedField
-from rest_framework.serializers import ModelSerializer, Serializer, CharField, EmailField, IntegerField,ValidationError
+from rest_framework.serializers import ModelSerializer, Serializer, CharField, EmailField, IntegerField, ValidationError
 from .models import CustomUser
 
 
@@ -8,14 +8,14 @@ class CustomUserModelSerializer(ModelSerializer):
     email = EmailField(max_length=90)
     username = CharField(max_length=45)
     password = CharField(min_length=5, write_only=True)
-    groups=StringRelatedField(many=True)
+    groups = StringRelatedField(many=True)
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'email', 'password','groups']
+        fields = ['username', 'email', 'password', 'groups']
 
     def create(self, validated_data):
-        user=CustomUser(
+        user = CustomUser(
             username=validated_data['username'],
             email=validated_data['email']
         )
@@ -35,3 +35,15 @@ class CustomUserModelSerializer(ModelSerializer):
             raise ValidationError("User with this email exists")
 
         return super().validate(attrs)
+
+
+class UserSerializerUpdate(ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['is_superuser', 'is_staff']
+
+
+class UserCustomSerializer(ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'email']

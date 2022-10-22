@@ -14,7 +14,7 @@ from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, renderer_classes, action
 
-from users.serializers import  CustomUserModelSerializer
+from users.serializers import CustomUserModelSerializer
 from .filters import UserFilter, ProjectFilter, ToDoFilter
 from .models import Project, ToDo, User
 from .serializers import ProjectSerializer, ToDoSerializer, UserSerializer, UserModelSerializer
@@ -58,11 +58,12 @@ class UserViewSet(ViewSet):
 
 
 class ProjectViewSet(ModelViewSet):
-    #permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     serializer_class = ProjectSerializer
     queryset = Project.objects.all().order_by('id')
     # pagination_class = UserPagination
     filterset_class = ProjectFilter
+
 
 class AdminOnly(BasePermission):
     def has_permission(self, request, view):
@@ -70,12 +71,12 @@ class AdminOnly(BasePermission):
 
 
 class ToDoViewSet(ModelViewSet):
-    #permission_classes = [AdminOnly]
+    # permission_classes = [AdminOnly]
     serializer_class = ToDoSerializer
     queryset = ToDo.objects.all().order_by('id')
     filterset_class = ToDoFilter
-    # pagination_class = ToDoPagination
 
+    # pagination_class = ToDoPagination
 
     def destroy(self, request, *args, **kwargs):
         todo = self.get_object()
@@ -113,3 +114,5 @@ def user_post(request, pk=None):
         return HttpResponse(json_data)
 
     return HttpResponseBadRequest(JSONRenderer().render(serializer.errors))
+
+
