@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django_filters',
     'rest_framework.authtoken',
     'drf_yasg',
+    'graphene_django',
 
   ]
 
@@ -60,10 +61,16 @@ MIDDLEWARE = [
 
 
 ]
+
+
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
+
 ]
+
+
+
 ROOT_URLCONF = 'django_rest.urls'
 
 TEMPLATES = [
@@ -190,4 +197,8 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
+
+GRAPHENE = {
+    'SCHEMA': 'todo.schema.schema'
 }

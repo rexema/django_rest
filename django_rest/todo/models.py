@@ -18,7 +18,7 @@ class User(models.Model):
 class Project(models.Model):
     name = models.CharField(max_length=80)
     link = models.URLField(default=None)
-    user = models.ManyToManyField(CustomUser)
+    users = models.ManyToManyField(CustomUser)
 
     def __str__(self):
         return f'{self.name}'

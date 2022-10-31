@@ -32,7 +32,7 @@ class UserModelSerializer(Serializer):
 
 
 class ProjectSerializer(ModelSerializer):
-    user = StringRelatedField(many=True)
+    # user = StringRelatedField(many=True)
 
     class Meta:
         model = Project
