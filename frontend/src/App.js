@@ -50,6 +50,7 @@ class App extends React.Component {
                 console.log(error)
                 this.setState({projects: []})
             })
+            console.log(id)
     }
 
 
@@ -97,6 +98,7 @@ class App extends React.Component {
         let headers = {
             'Content-Type': 'application/json',
 
+
         }
         if (this.is_auth()){
             headers['Authorization'] = 'Token '+ this.state.token
@@ -109,6 +111,7 @@ class App extends React.Component {
         const cookies = new Cookies()
         const token = cookies.get('token')
         this.setState({'token': token}, ()=> this.load_data())
+
     }
 
 
@@ -179,15 +182,15 @@ class App extends React.Component {
 
                 <Route exact path='/' element={<Navigate to='/users'/>}/>
                <Route exact path='/users' element = {<UsersList users={this.state.users} delete_user={(id)=>this.delete_user(id)}/>} />
-//                <Route exact path='/projects' element =  {<ProjectList projects={this.state.projects} delete_project={(id)=>this.delete_project(id)}/>} />
+               <Route exact path='/projects' element =  {<ProjectList projects={this.state.projects} delete_project={(id)=>this.delete_project(id)}/>} />
                 <Route path='/users'>
                     <Route index element ={<UsersList users={this.state.users}/>} />
                     <Route path=':userId' element ={<ProjectsUsers projects={this.state.projects}/>} />
                 </Route>
-                <Route path='/projects'>
-                    <Route index element = {<ProjectList projects={this.state.projects} delete_project={(id)=>this.delete_project(id)}/>} />
+//                <Route path='/projects'>
+//                    <Route index element = {<ProjectList projects={this.state.projects} delete_project={(id)=>this.delete_project(id)}/>} />
 //                    <Route path = ':projectId' element = {<ProjectsDetail projects={this.state.projects}/>} />
-                     <Route path='/projects/create' element={<ProjectForm users={this.state.users}
+//                     <Route path='/projects/create' element={<ProjectForm users={this.state.users}
                                              create_project={(title, link, users) => this.create_project(title, link, users)}
                                 />}
                             />
