@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {Link} from 'react-router-dom';
+import Table from "react-bootstrap/Table";
+
 
 const UserItem = ({user, delete_user}) => {
     return (
+
         <tr>
             <td>
                 <Link to={`/users/${user.id}`}>{user.username}</Link>
@@ -10,26 +13,41 @@ const UserItem = ({user, delete_user}) => {
             <td>
                 {user.email}
             </td>
-             <td><button onClick={()=>delete_user(user.id)} type='button'>Delete</button>
-             </td>
+
         </tr>
     )
 }
 
-const UsersList = ({users, delete_user}) => {
+const UsersList = ({users}) => {
+    const [value, setValue ] = useState('')
+    const filteredUsers = users.filter(user => {
+        return user.username.toLowerCase().includes(value.toLowerCase())
+    })
     return (
-        <table>
+        <div>
+             <div className="form">
+                <form className="search__form">
+                    <input
+                        type="text"
+                        placeholder = "Search in users..."
+                        className = "search__input"
+                        onChange = {(event) => setValue(event.target.value)}
+                        />
+                </form>
+            </div>
+        <Table striped bordered hover>
             <th>
                 Username
              </th>
              <th>
                 Email
              </th>
-             <th>
-                Delete
-             </th>
-             {users.map((user)=> <UserItem user={user} delete_user={delete_user}/> )}
-        </table>
+            <tbody>
+             {filteredUsers.map((user)=> <UserItem user={user}/> )}
+            </tbody>
+        </Table>
+
+    </div>
     )
 }
 

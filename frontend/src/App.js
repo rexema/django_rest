@@ -1,7 +1,7 @@
 import React from 'react';
+import {ReactComponent as ReactLogo} from './logo.svg';
 import UsersList from './components/UsersList.js';
 import axios from 'axios';
-import NaviBar from './components/NaviBar';
 import Footer from './components/Footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ProjectList from './components/ProjectList.js';
@@ -13,8 +13,8 @@ import ProjectsDetail from './components/ProjectsDetail';
 import LoginForm from './components/Auth'
 import Cookies from 'universal-cookie'
 import ProjectForm from './components/ProjectForm';
-
-
+import ToDoForm from './components/ToDoForm';
+import {Container, Nav, Navbar} from "react-bootstrap";
 
 
 class App extends React.Component {
@@ -29,17 +29,6 @@ class App extends React.Component {
            }
     }
 
-    delete_user(id){
-
-            const headers = this.get_headers()
-            axios.delete(`http://127.0.0.1:8000/api/users/${id}`, {headers})
-            .then(response => {
-                this.load_data()
-            }).catch(error =>{
-            console.log(error)
-            this.setState({users:[]})})
-        }
-
     delete_project(id) {
         const headers = this.get_headers()
         axios.delete(`http://127.0.0.1:8000/api/project/${id}`, {headers})
@@ -50,14 +39,33 @@ class App extends React.Component {
                 console.log(error)
                 this.setState({projects: []})
             })
-            console.log(id)
+        }
+    delete_todo(id){
+        const headers = this.get_headers()
+        axios.delete(`http://127.0.0.1:8000/api/todo/${id}`, {headers})
+            .then(response => {
+               this.load.data()
+              }).catch(error => {
+            this.setState({todos:[]})
+            })
+    }
+    create_todo(text, user, project){
+        const headers = this.get_headers()
+        const data = {text: text, user: user, project: project}
+        axios.post(`http://127.0.0.1:8000/api/todo/`, data, {headers})
+             .then(response => {
+               this.load.data()
+              }).catch(error => {
+            this.setState({todos:[]})
+            })
     }
 
 
-    create_project(name, users){
+
+    create_project(name, link, users){
         const headers = this.get_headers()
-        const data = {name: name, users:users}
-        axios.post(`http://127.0.0.1:8000/api/project`,data, {headers})
+        const data = {name: name, link: link,users: users}
+        axios.post(`http://127.0.0.1:8000/api/project/`,data, {headers})
             .then(response => {
                this.load.data()
               }).catch(error => {
@@ -159,52 +167,61 @@ class App extends React.Component {
 
     render(){
         return(
-        <div>
-        <NaviBar />
+          <Container className="p-2">
 
-        <BrowserRouter>
-            <nav>
-                <li>
-                    <Link to='/'>Users</Link>
-                </li>
-                <li>
-                    <Link to='/projects'>Projects</Link>
-                </li>
-                 <li>
-                    <Link to='/todos'>ToDos</Link>
-                </li>
-                <li>
-                    {this.is_auth() ? <button onClick={()=> this.logout()}>Logout</button> : <Link to='/login'>Login</Link>}
-                </li>
-            </nav>
+                    <BrowserRouter>
+                        <Navbar bg="dark" variant="dark">
+                            <Container>
+                                <ReactLogo width="30" height="30"/>
+                                <Nav className="me-auto">
+                                    <Nav.Link as={Link} to='/'>Users</Nav.Link>
+                                    <Nav.Link as={Link} to="/projects">Projects</Nav.Link>
+                                    <Nav.Link as={Link} to="/todos">Todo</Nav.Link>
+
+                                    {this.is_auth() ?
+                                        <Nav.Link onClick={() => this.logout()}>Exit</Nav.Link> :
+                                        <Nav.Link as={Link} to="/login">Enter</Nav.Link>}
+                                </Nav>
+                            </Container>
+                        </Navbar>
 
             <Routes>
 
                 <Route exact path='/' element={<Navigate to='/users'/>}/>
-               <Route exact path='/users' element = {<UsersList users={this.state.users} delete_user={(id)=>this.delete_user(id)}/>} />
-               <Route exact path='/projects' element =  {<ProjectList projects={this.state.projects} delete_project={(id)=>this.delete_project(id)}/>} />
                 <Route path='/users'>
-                    <Route index element ={<UsersList users={this.state.users}/>} />
+                    <Route index element ={<UsersList users={this.state.users} />} />
                     <Route path=':userId' element ={<ProjectsUsers projects={this.state.projects}/>} />
+
                 </Route>
-//                <Route path='/projects'>
-//                    <Route index element = {<ProjectList projects={this.state.projects} delete_project={(id)=>this.delete_project(id)}/>} />
-//                    <Route path = ':projectId' element = {<ProjectsDetail projects={this.state.projects}/>} />
-//                     <Route path='/projects/create' element={<ProjectForm users={this.state.users}
-                                             create_project={(title, link, users) => this.create_project(title, link, users)}
+                <Route exact path='/projects'>
+                    <Route index element = {<ProjectList projects={this.state.projects} users={this.state.users} delete_project={(id)=>this.delete_project(id)}/>} />
+                    <Route path = ':projectId' element = {<ProjectsDetail projects={this.state.projects}/>} />
+                   <Route path='/projects/create' element={
+                                <ProjectForm users={this.state.users}
+                                             create_project={(name, link, users) => this.create_project(name, link, users)}
                                 />}
                             />
+
                 </Route>
 
-                 <Route exact path='/todos'element =  {<ToDoList todos={this.state.todos}/>} />
+                <Route exact path='/todos' element={
+                            <ToDoList todos={this.state.todos} delete_todo={(id) => this.delete_todo(id)}
+                            />}
+                        />
+                        <Route exact path='/todos/create' element={
+                            <ToDoForm projects={(this.state.projects)} users={this.state.users} create_todo={(text, user, project) => this.create_todo(text, user, project)}
+                            />}
+                        />
+
                  <Route path='*' element={<NotFound404/>}/>
                 <Route path = '/projects1' element={<Navigate to='/projects' />} />
                  <Route exact path='/login' element =  {<LoginForm get_token={(username, password) => this.get_token(username, password)}/>}/>
                  </Routes>
-
+               <Footer />
         </BrowserRouter>
-        <Footer />
-        </div>
+
+        </Container>
+
 
             )}
 }

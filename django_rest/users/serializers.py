@@ -8,11 +8,11 @@ class CustomUserModelSerializer(ModelSerializer):
     email = EmailField(max_length=90)
     username = CharField(max_length=45)
     password = CharField(min_length=5, write_only=True)
-    groups = StringRelatedField(many=True)
+
 
     class Meta:
         model = CustomUser
-        fields = ['id','username', 'email', 'password', 'groups']
+        fields = ['id','username', 'email', 'password']
 
     def create(self, validated_data):
         user = CustomUser(

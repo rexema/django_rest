@@ -25,8 +25,14 @@ class Project(models.Model):
 
 
 class ToDo(models.Model):
-    text = models.TextField(max_length=120)
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    project = models.OneToOneField(Project, on_delete=models.CASCADE)
+
+    text = models.TextField(max_length=120, blank=False)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     is_accomplished = models.BooleanField(default=False)
     is_deleted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.text}'
+
+

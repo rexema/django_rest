@@ -13,13 +13,13 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, renderer_classes, action
-
 from users.serializers import CustomUserModelSerializer
 from .filters import UserFilter, ProjectFilter, ToDoFilter
 from .models import Project, ToDo, User
 from .serializers import ProjectSerializer, ToDoSerializer, UserSerializer, UserModelSerializer
 from django_filters import rest_framework as filters
 from users.models import CustomUser
+from rest_framework import filters
 
 
 class UserPagination(PageNumberPagination):
@@ -114,5 +114,3 @@ def user_post(request, pk=None):
         return HttpResponse(json_data)
 
     return HttpResponseBadRequest(JSONRenderer().render(serializer.errors))
-
-

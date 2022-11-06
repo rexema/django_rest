@@ -5,7 +5,7 @@ from users.models import CustomUser
 from users.serializers import CustomUserModelSerializer
 from .models import Project, ToDo, User
 from rest_framework.serializers import ModelSerializer, Serializer, CharField, EmailField, StringRelatedField
-
+from users.models import CustomUser
 
 class UserSerializer(ModelSerializer):
     class Meta:
@@ -32,7 +32,7 @@ class UserModelSerializer(Serializer):
 
 
 class ProjectSerializer(ModelSerializer):
-    # user = StringRelatedField(many=True)
+
 
     class Meta:
         model = Project
@@ -40,11 +40,11 @@ class ProjectSerializer(ModelSerializer):
 
 
 class ToDoSerializer(ModelSerializer):
-    user = StringRelatedField(many=False)
-    project = StringRelatedField(many=False)
+
 
     class Meta:
         model = ToDo
-        fields = ['text', 'user', 'project']
+        fields = '__all__'
+
 
 
