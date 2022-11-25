@@ -4,4 +4,14 @@ from users.models import CustomUser
 
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
-        CustomUser.objects.create_superuser(username='sveta', email='sveta@mail.ru', password='sveta_2022')
+        user = CustomUser.objects.filter(username='nastya').first()
+        if not user:
+            CustomUser.objects.create_superuser(username='nastya', email='nastya@mail.ru', password='123')
+            data_user = {
+                'username': 'sveta',
+                'first_name': 'sveta',
+                'last_name': 'sosnina',
+                'email': 'sveta@mail.ru'
+                }
+            user = CustomUser.objects.create(**data_user)
+            
